@@ -3,6 +3,7 @@ package lazarini.lucas.intent
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 // import androidx.activity.result.ActivityResult // parl not lambda
 // import androidx.activity.result.ActivityResultCallback // parl not lambda
 import androidx.activity.result.ActivityResultLauncher
@@ -72,8 +73,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?):Boolean{
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.viewMi -> { true }
+            R.id.callMi -> { true }
+            R.id.dialMi -> { true }
+            R.id.pickMi -> { true }
+            R.id.chooserMi -> { true }
+            else -> {false}
+        }
     }
 }
