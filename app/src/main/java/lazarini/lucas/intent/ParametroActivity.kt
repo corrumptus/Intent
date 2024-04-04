@@ -15,6 +15,10 @@ class ParametroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(apb.root)
 
+        intent.getStringExtra(PARAMETRO_EXTRA)?.let{
+            apb.parametroEt.setText(it)
+        }
+
         apb.mainTb.apply {
             title = getString(R.string.app_name)
             subtitle = this@ParametroActivity.javaClass.simpleName
