@@ -1,8 +1,12 @@
 package lazarini.lucas.intent
 
+import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
+import android.content.Intent.ACTION_CALL
 import android.content.Intent.ACTION_VIEW
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -22,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     // parametro activity result launcher (parl)
     private lateinit var parl: ActivityResultLauncher<Intent>
+
+    private lateinit var permissaoChamada: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,11 +94,35 @@ class MainActivity : AppCompatActivity() {
                 startActivity(navegadorIntent)
                 true
             }
-            R.id.callMi -> { true }
+            R.id.callMi -> {
+                // checks if the phone android version is the lower than 23
+                // the permission system changes in the android API 23
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
+                    val chamarIntent: Intent = Intent(ACTION_CALL)
+                    chamarIntent.data = numeroUri
+                    startActivity(chamarIntent)
+                    return true
+                }
+
+                // phone android version greater than 23
+
+                // if the permission was granted it will call else will request the permission
+                if (checkSelfPermission(CALL_PHONE) == PERMISSION_GRANTED) {
+                    val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
+                    val chamarIntent: Intent = Intent(ACTION_CALL)
+                    chamarIntent.data = numeroUri
+                    startActivity(chamarIntent)
+                } else {
+                    permissaoChamada.launch(CALL_PHONE)
+                }
+
+                true
+            }
             R.id.dialMi -> { true }
             R.id.pickMi -> { true }
             R.id.chooserMi -> { true }
-            else -> {false}
+            else -> { false }
         }
     }
 }
