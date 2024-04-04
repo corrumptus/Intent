@@ -97,22 +97,18 @@ class MainActivity : AppCompatActivity() {
             R.id.callMi -> {
                 // checks if the phone android version is the lower than 23
                 // the permission system changes in the android API 23
+                // before the API 23 the permission is granted in the installation time
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
-                    val chamarIntent: Intent = Intent(ACTION_CALL)
-                    chamarIntent.data = numeroUri
-                    startActivity(chamarIntent)
+                    chamarNumero()
                     return true
                 }
 
                 // phone android version greater than 23
+                // on the API 23+ the permission is granted dynamically
 
                 // if the permission was granted it will call else will request the permission
                 if (checkSelfPermission(CALL_PHONE) == PERMISSION_GRANTED) {
-                    val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
-                    val chamarIntent: Intent = Intent(ACTION_CALL)
-                    chamarIntent.data = numeroUri
-                    startActivity(chamarIntent)
+                    chamarNumero()
                 } else {
                     permissaoChamada.launch(CALL_PHONE)
                 }
@@ -124,5 +120,12 @@ class MainActivity : AppCompatActivity() {
             R.id.chooserMi -> { true }
             else -> { false }
         }
+    }
+
+    private fun chamarNumero() {
+        val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
+        val chamarIntent: Intent = Intent(ACTION_CALL)
+        chamarIntent.data = numeroUri
+        startActivity(chamarIntent)
     }
 }
