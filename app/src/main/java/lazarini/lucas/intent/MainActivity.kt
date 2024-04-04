@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 // the permission system changes in the android API 23
                 // before the API 23 the permission is granted in the installation time
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    chamarNumero()
+                    chamarNumero(chamar = true)
                     return true
                 }
 
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
                 // if the permission was granted it will call else will request the permission
                 if (checkSelfPermission(CALL_PHONE) == PERMISSION_GRANTED) {
-                    chamarNumero()
+                    chamarNumero(chamar = true)
                 } else {
                     permissaoChamada.launch(CALL_PHONE)
                 }
@@ -117,10 +117,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.dialMi -> {
-                val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
-                val chamarIntent: Intent = Intent(ACTION_DIAL)
-                chamarIntent.data = numeroUri
-                startActivity(chamarIntent)
+                chamarNumero(chamr = false)
                 true
             }
             R.id.pickMi -> { true }
@@ -131,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun chamarNumero(chamar: Boolean) {
         val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
-        val chamarIntent: Intent = Intent(ACTION_CALL)
+        val chamarIntent: Intent = Intent(if(chamar) ACTION_CALL else ACTION_DIAL)
         chamarIntent.data = numeroUri
         startActivity(chamarIntent)
     }
