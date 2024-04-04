@@ -19,5 +19,21 @@ class MainActivity : AppCompatActivity() {
             subtitle = this@MainActivity.javaClass.simpleName
             setSupportActionBar(this)
         }
+
+        amb.entrarParametroBt.setOnClickListener {
+            // explicita
+		    Intent(this, ParametroActivity::class.java).also {
+                it.putExtra(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
+                startActivityForResult(it, PARAMETRO_REQUEST_CODE)
+            }
+
+            /*
+            // implicita
+            Intent("ABRA_PARAMETRO_ACTIVTY").also {
+                it.putExtra(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
+                startActivityForResult(it, PARAMETRO_REQUEST_CODE)
+            }
+            */
+        }
     }
 }
