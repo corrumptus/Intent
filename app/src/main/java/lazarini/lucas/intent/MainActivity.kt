@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 // import androidx.activity.result.ActivityResult // parl not lambda
 // import androidx.activity.result.ActivityResultCallback // parl not lambda
 import androidx.activity.result.ActivityResultLauncher
@@ -88,11 +89,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        pegarImagemArl= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                resultado ->
-            if(resultado.resultCode == RESULT_OK){
-                resultado.data?.data?.let { imagemUri ->amb.parametroTv.text = imagemUri.toString()
-                    Intent(ACTION_VIEW, imagemUri).also { startActivity(it) }}
+        permissaoChamada = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { permissaoConcedida ->
+            if (permissaoConcedida)
+                chamarNumero(chamar = true)
+            else
+                Toast.makeText(this,"Permissao necessaria para continuar", Toast.LENGTH_LONG).show()
+        }
+
+        pegarImagemArl= registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { resultado ->
+            if (resultado.resultCode == RESULT_OK) {
+                resultado.data?.data?.let {
+                    imagemUri -> amb.parametroTv.text = imagemUri.toString()
+                    Intent(ACTION_VIEW, imagemUri).also { startActivity(it) }
+                }
             }
         }
     }
@@ -103,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        return when (item.itemId) {
             R.id.viewMi -> {
                 val url: Uri = Uri.parse(amb.parametroTv.text.toString())
                 val navegadorIntent: Intent = Intent(ACTION_VIEW, url)
@@ -123,11 +136,10 @@ class MainActivity : AppCompatActivity() {
                 // on the API 23+ the permission is granted dynamically
 
                 // if the permission was granted it will call else will request the permission
-                if (checkSelfPermission(CALL_PHONE) == PERMISSION_GRANTED) {
+                if (checkSelfPermission(CALL_PHONE) == PERMISSION_GRANTED)
                     chamarNumero(chamar = true)
-                } else {
+                else
                     permissaoChamada.launch(CALL_PHONE)
-                }
 
                 true
             }
@@ -147,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 // é necessário 2 intents:
                 // a intent mais exterior é do tipo chooser e dentro dela existe outra intent
                 // para abrir o tipo de aplicativo requerido
-                Uri.parse(amb.parametroTv.text.toString()).let{ uri ->
+                Uri.parse(amb.parametroTv.text.toString()).let { uri ->
                     Intent(ACTION_VIEW, uri).also { navegadorIntent ->
                         val escolherAppIntent = Intent(ACTION_CHOOSER)
                         escolherAppIntent.putExtra(EXTRA_TITLE, "Escolha seu navegador favorito")
@@ -162,7 +174,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun chamarNumero(chamar: Boolean) {
-        val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
+        val numeroUri: Uri = Uri.parse("tel: ${amb.parametroTv.text}")
         val chamarIntent: Intent = Intent(if(chamar) ACTION_CALL else ACTION_DIAL)
         chamarIntent.data = numeroUri
         startActivity(chamarIntent)
