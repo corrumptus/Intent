@@ -3,6 +3,8 @@ package lazarini.lucas.intent
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import lazarini.lucas.intent.Constantes.PARAMETRO_EXTRA
+import lazarini.lucas.intent.Constantes.PARAMETRO_REQUEST_CODE
 import lazarini.lucas.intent.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
