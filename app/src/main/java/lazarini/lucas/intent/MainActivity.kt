@@ -3,9 +3,12 @@ package lazarini.lucas.intent
 import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
+import android.content.Intent.ACTION_CHOOSER
 import android.content.Intent.ACTION_DIAL
 import android.content.Intent.ACTION_PICK
 import android.content.Intent.ACTION_VIEW
+import android.content.Intent.EXTRA_INTENT
+import android.content.Intent.EXTRA_TITLE
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.os.Build
@@ -135,11 +138,25 @@ class MainActivity : AppCompatActivity() {
             R.id.pickMi -> {
                 val pegarImagemIntent = Intent(ACTION_PICK)
                 val diretorioImagens = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
-                pegarImagemIntent.setDataAndType(Uri.parse(diretorioImagens),"image/*")
+                pegarImagemIntent.setDataAndType(Uri.parse(diretorioImagens), "image/*")
                 pegarImagemArl.launch(pegarImagemIntent)
                 true
             }
-            R.id.chooserMi -> { true }
+            R.id.chooserMi -> {
+                // para forçar o usuário a escolher um aplicativo mesmo com um padrão setado
+                // é necessário 2 intents:
+                // a intent mais exterior é do tipo chooser e dentro dela existe outra intent
+                // para abrir o tipo de aplicativo requerido
+                Uri.parse(amb.parametroTv.text.toString()).let{ uri ->
+                    Intent(ACTION_VIEW, uri).also { navegadorIntent ->
+                        val escolherAppIntent = Intent(ACTION_CHOOSER)
+                        escolherAppIntent.putExtra(EXTRA_TITLE, "Escolha seu navegador favorito")
+                        escolherAppIntent.putExtra(EXTRA_INTENT, navegadorIntent)
+                        startActivity(escolherAppIntent)
+                    }
+                }
+                true
+            }
             else -> { false }
         }
     }
