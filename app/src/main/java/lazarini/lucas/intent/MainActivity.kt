@@ -3,6 +3,7 @@ package lazarini.lucas.intent
 import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
+import android.content.Intent.ACTION_DIAL
 import android.content.Intent.ACTION_VIEW
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
@@ -115,14 +116,20 @@ class MainActivity : AppCompatActivity() {
 
                 true
             }
-            R.id.dialMi -> { true }
+            R.id.dialMi -> {
+                val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
+                val chamarIntent: Intent = Intent(ACTION_DIAL)
+                chamarIntent.data = numeroUri
+                startActivity(chamarIntent)
+                true
+            }
             R.id.pickMi -> { true }
             R.id.chooserMi -> { true }
             else -> { false }
         }
     }
 
-    private fun chamarNumero() {
+    private fun chamarNumero(chamar: Boolean) {
         val numeroUri: Uri = Uri.parse("tel:${amb.parametroTv.text}")
         val chamarIntent: Intent = Intent(ACTION_CALL)
         chamarIntent.data = numeroUri
