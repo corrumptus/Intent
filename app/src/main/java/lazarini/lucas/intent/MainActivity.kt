@@ -2,6 +2,10 @@ package lazarini.lucas.intent
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import lazarini.lucas.intent.Constantes.PARAMETRO_EXTRA
 import lazarini.lucas.intent.Constantes.PARAMETRO_REQUEST_CODE
@@ -11,6 +15,9 @@ class MainActivity : AppCompatActivity() {
     private val amb: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    // parametro activity result launcher (parl)
+    private lateinit var parl: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,5 +44,18 @@ class MainActivity : AppCompatActivity() {
             }
             */
         }
+
+        parl = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            object: ActivityResultCallback<ActivityResult> {
+                override fun onActivityResult(result: ActivityResult) {
+                    if (result.resultCode == RESULT_OK){
+                        result.data?.getStringExtra(PARAMETRO_EXTRA)?.let{
+                            amb.parametroTv.text = it
+                        }
+                    }
+                }
+            }
+        )
     }
 }
