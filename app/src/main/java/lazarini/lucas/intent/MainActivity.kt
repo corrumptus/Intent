@@ -2,6 +2,7 @@ package lazarini.lucas.intent
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 // import androidx.activity.result.ActivityResult // parl not lambda
 // import androidx.activity.result.ActivityResultCallback // parl not lambda
 import androidx.activity.result.ActivityResultLauncher
@@ -69,5 +70,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?):Boolean{
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
     }
 }
