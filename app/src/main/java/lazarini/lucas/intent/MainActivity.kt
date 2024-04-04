@@ -4,11 +4,13 @@ import android.Manifest.permission.CALL_PHONE
 import android.content.Intent
 import android.content.Intent.ACTION_CALL
 import android.content.Intent.ACTION_DIAL
+import android.content.Intent.ACTION_PICK
 import android.content.Intent.ACTION_VIEW
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 // import androidx.activity.result.ActivityResult // parl not lambda
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var parl: ActivityResultLauncher<Intent>
 
     private lateinit var permissaoChamada: ActivityResultLauncher<String>
+
+    private lateinit var pegarImagemArl : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +84,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        pegarImagemArl= registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+                resultado ->
+            if(resultado.resultCode == RESULT_OK){
+                resultado.data?.data?.let { imagemUri ->amb.parametroTv.text = imagemUri.toString()
+                    Intent(ACTION_VIEW, imagemUri).also { startActivity(it) }}
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -120,7 +132,13 @@ class MainActivity : AppCompatActivity() {
                 chamarNumero(chamar = false)
                 true
             }
-            R.id.pickMi -> { true }
+            R.id.pickMi -> {
+                val pegarImagemIntent = Intent(ACTION_PICK)
+                val diretorioImagens = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path
+                pegarImagemIntent.setDataAndType(Uri.parse(diretorioImagens),"image/*")
+                pegarImagemArl.launch(pegarImagemIntent)
+                true
+            }
             R.id.chooserMi -> { true }
             else -> { false }
         }
