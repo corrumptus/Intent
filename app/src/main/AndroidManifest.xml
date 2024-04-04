@@ -21,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ParametroActivity"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name = "ABRA_PARAMETRO_ACTIVITY"/>
+                <category android:name = "android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
