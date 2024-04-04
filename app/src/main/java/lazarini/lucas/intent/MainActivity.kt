@@ -2,8 +2,8 @@ package lazarini.lucas.intent
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
+// import androidx.activity.result.ActivityResult // parl not lambda
+// import androidx.activity.result.ActivityResultCallback // parl not lambda
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
             */
         }
 
+        /*
         parl = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
             object: ActivityResultCallback<ActivityResult> {
@@ -57,5 +58,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+        */
+
+        parl = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.getStringExtra(PARAMETRO_EXTRA)?.let {
+                    amb.parametroTv.text = it
+                }
+            }
+        }
     }
 }
