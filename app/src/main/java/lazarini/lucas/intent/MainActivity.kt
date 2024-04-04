@@ -23,7 +23,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import lazarini.lucas.intent.Constantes.PARAMETRO_EXTRA
-import lazarini.lucas.intent.Constantes.PARAMETRO_REQUEST_CODE
+// import lazarini.lucas.intent.Constantes.PARAMETRO_REQUEST_CODE // startActivityForResult
 import lazarini.lucas.intent.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             // explicita
 		    Intent(this, ParametroActivity::class.java).also {
                 it.putExtra(PARAMETRO_EXTRA, amb.parametroTv.text.toString())
-                startActivityForResult(it, PARAMETRO_REQUEST_CODE)
+                parl.launch(it)
             }
 
             /*
@@ -109,6 +109,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    // forma deprecated de obter os resultados quando lançada uma intent por meio de
+    // startActivityForResult
+    /*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode != PARAMETRO_REQUEST_CODE)
+            return
+
+        if (resultCode != RESULT_OK)
+            return
+
+        if (data == null)
+            return
+
+        val parametro = data.getStringExtra(PARAMETRO_EXTRA)
+        amb.parametroTv.text = parametro
+    }
+    */
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
