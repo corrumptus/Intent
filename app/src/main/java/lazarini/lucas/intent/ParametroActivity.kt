@@ -12,5 +12,11 @@ class ParametroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(apb.root)
+
+        apb.mainTb.apply {
+            title = getString(R.string.app_name)
+            subtitle = this@ParametroActivity.javaClass.simpleName
+            setSupportActionBar(this)
+        }
     }
 }
