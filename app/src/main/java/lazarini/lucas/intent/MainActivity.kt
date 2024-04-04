@@ -1,6 +1,8 @@
 package lazarini.lucas.intent
 
 import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -80,7 +82,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.viewMi -> { true }
+            R.id.viewMi -> {
+                val url: Uri = Uri.parse(amb.parametroTv.text.toString())
+                val navegadorIntent: Intent = Intent(ACTION_VIEW, url)
+                startActivity(navegadorIntent)
+                true
+            }
             R.id.callMi -> { true }
             R.id.dialMi -> { true }
             R.id.pickMi -> { true }
