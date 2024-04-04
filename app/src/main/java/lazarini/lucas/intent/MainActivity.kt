@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.dialMi -> {
-                chamarNumero(chamr = false)
+                chamarNumero(chamar = false)
                 true
             }
             R.id.pickMi -> { true }
